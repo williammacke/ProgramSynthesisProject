@@ -1,3 +1,16 @@
+class Function:
+    def __init__(self, function, num_args):
+        self._function = function
+        self._num_args = num_args
+
+    @property
+    def function(self):
+        return self._function
+
+    @property
+    def num_args(self):
+        return self._num_args
+
 class Expression:
     def __init__(self, params, function):
         self._params = params
