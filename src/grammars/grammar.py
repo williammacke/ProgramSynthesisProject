@@ -4,7 +4,7 @@ import copy
 from ..expressions.expression import Expression
 
 class Grammar:
-    def __init__(self, start, non_terminals, terminals):
+    def __init__(self, start, terminals, non_terminals = []):
         self._start = start
         self._non_terminals = set([start] + list(non_terminals))
         self._symbols = set(list(self._non_terminals) + list(terminals))
