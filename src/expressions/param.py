@@ -17,17 +17,20 @@ class Value:
     def space(self):
         return []
 
-    @propery
+    @property
     def params(self):
         return []
 
-    @propery
+    @property
     def inputs(self):
+        return []
+
+    @property
+    def expressions(self):
         return []
 
     def __deepcopy__(self):
         return Value(self.value)
-
 
 class Param:
     def __init__(self, space, value=None):
@@ -59,6 +62,10 @@ class Param:
     def inputs(self):
         return []
 
+    @property
+    def expressions(self):
+        return []
+
     def __deepcopy__(self):
         return Param(self._space, self._value)
 
@@ -88,6 +95,10 @@ class Input:
     @property
     def inputs(self):
         return [self]
+
+    @property
+    def expressions(self):
+        return []
 
     def __deepcopy__(self):
         return Input(self._name, self._value)

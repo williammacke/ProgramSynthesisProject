@@ -79,6 +79,10 @@ class Expression:
     def inputs(self):
         return [p for param in self._params for p in param.inputs]
 
+    @property
+    def expressions(self):
+        return [self] + [e for param in self._params for e in param.expressions]
+
     def __deepcopy__(self):
         return Expression([copy.deepcopy(p) for p in self._params], self._function, self._id)
 

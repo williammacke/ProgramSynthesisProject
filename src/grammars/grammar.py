@@ -1,5 +1,6 @@
 import non_terminal
 import random
+import copy
 from ..expressions.expression import Expression
 
 class Grammar:
@@ -19,6 +20,22 @@ class Grammar:
 
     def gen_random_program(self):
         return self._start.expand()
+
+    def modify_program(self, program, random_prob=0):
+        if random.random() < random_prob:
+            return self.get_random_program()
+        p = copy.deepcopy(program)
+        e = random.choice(p.expressions)
+        ep = e.parent
+        if ep:
+            for i,expr in enumerate(ep._params):
+                if expr == e:
+                    ep._params[i] = copy.deepcopy(self._expressions[e.id])
+        else:
+            p = self._expressions(p.id)
+        return p.expand()
+
+
 
     @property
     def non_terminals(self):
