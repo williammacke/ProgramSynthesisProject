@@ -21,6 +21,10 @@ class NonTerminal:
     def expressions(self):
         return self._expressions
 
-    def __deepcopy__(self):
+    @property
+    def code(self):
+        return str(self._id)
+
+    def __deepcopy__(self, memo):
         return NonTerminal([copy.deepcopy(e) for e in self._expressions], self._id_)
 

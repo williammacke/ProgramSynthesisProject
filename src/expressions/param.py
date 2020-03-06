@@ -29,7 +29,11 @@ class Value:
     def expressions(self):
         return []
 
-    def __deepcopy__(self):
+    @property
+    def code(self):
+        return str(self._value)
+
+    def __deepcopy__(self, memo):
         return Value(self.value)
 
 class Param:
@@ -66,7 +70,11 @@ class Param:
     def expressions(self):
         return []
 
-    def __deepcopy__(self):
+    @property
+    def code(self):
+        return str(self._value)
+
+    def __deepcopy__(self, memo):
         return Param(self._space, self._value)
 
 
@@ -82,7 +90,7 @@ class Input:
         self._value = value
 
     def expand(self):
-        return copy.deepcopy(self)
+        return self
 
     @property
     def value(self):
@@ -100,5 +108,13 @@ class Input:
     def expressions(self):
         return []
 
-    def __deepcopy__(self):
-        return Input(self._name, self._value)
+    @property
+    def space(self):
+        return []
+
+    @property
+    def code(self):
+        return self._name
+
+    def __deepcopy__(self, memo):
+        return self

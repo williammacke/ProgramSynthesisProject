@@ -5,7 +5,7 @@ class Function:
     def __init__(self, function, num_args, func_string=""):
         self._function = function
         self._num_args = num_args
-        self._func_string = ""
+        self._func_string = func_string
 
     @property
     def function(self):
@@ -19,13 +19,13 @@ class Function:
     def func_string(self):
         return self._func_string
 
-    def __deepcopy__(self):
-        return Function(self._function, self._num_args)
+    def __deepcopy__(self, memo):
+        return Function(self._function, self._num_args, self._func_string)
 
 class VarArgsFunction(Function):
     def __init__(self, function, min_args, max_args, func_string=""):
         super().__init__(function, max_args, func_string)
-        assert self._min_args < self._max_args
+        assert min_args < max_args
         self._min_args = min_args
         self._max_args = max_args
 
@@ -34,16 +34,17 @@ class VarArgsFunction(Function):
         return int(random.random()*(self._max_args-self._min_args))+self._min_args
 
 class Expression:
-    def __init__(self, params, function, ident=None):
+    def __init__(self, params, function, ident=None, func_string=""):
         self._params = params
         for p in self._params:
-            p.parent = self
+            p._parent = self
         self._function = function
         self._id = ident
         self._parent = None
+        self._func_string = func_string
 
     def expand(self):
-        return Expression([p.expand() for p in self._params], self.function)
+        return Expression([p.expand() for p in self._params], self._function, self._id, self._func_string)
 
 
     @property
@@ -83,8 +84,12 @@ class Expression:
     def expressions(self):
         return [self] + [e for param in self._params for e in param.expressions]
 
-    def __deepcopy__(self):
-        return Expression([copy.deepcopy(p) for p in self._params], self._function, self._id)
+    @property
+    def code(self):
+        return self._func_string.format([p.code for p in self._params])
+
+    def __deepcopy__(self, memo):
+        return Expression([copy.deepcopy(p) for p in self._params], self._function, self._id, self._func_string)
 
 def PLUS(*args):
     return functools.reduce(lambda a,b:a+b, args)
@@ -105,9 +110,9 @@ def IF(a, b, c):
         return c
 
 FUNCTIONS = [
-        VarArgsFunction(PLUS, 2, 10, "(+ {})"),
-        Function(MINUS, 2, "(- {})"),
-        VarArgsFunction(MULT, 2, 10, "(* {})"),
-        Function(DIV, 2, "(/ {})"),
-        Function(IF, 3, "(if {})")
+        VarArgsFunction(PLUS, 2, 10, func_string="(+ {})"),
+        Function(MINUS, 2, func_string="(- {})"),
+        VarArgsFunction(MULT, 2, 10, func_string="(* {})"),
+        Function(DIV, 2, func_string="(/ {})"),
+        Function(IF, 3, func_string="(if {})")
         ]

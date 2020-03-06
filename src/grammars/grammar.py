@@ -1,7 +1,7 @@
-import non_terminal
+from src.grammars import non_terminal
 import random
 import copy
-from ..expressions.expression import Expression
+from src.expressions.expression import Expression
 
 class Grammar:
     def __init__(self, start, terminals, non_terminals = []):
