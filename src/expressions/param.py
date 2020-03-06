@@ -1,3 +1,4 @@
+import copy
 class Value:
     def __init__(self, value):
         self._value = value
@@ -10,7 +11,7 @@ class Value:
         return self._value
 
     def expand(self):
-        return self
+        return copy.deepcopy(self)
 
     @property
     def space(self):
@@ -23,6 +24,9 @@ class Value:
     @propery
     def inputs(self):
         return []
+
+    def __deepcopy__(self):
+        return Value(self.value)
 
 
 class Param:
@@ -37,7 +41,7 @@ class Param:
         pass
 
     def expand(self):
-        return self
+        return copy.deepcopy(self)
 
     @property
     def value(self):
@@ -55,6 +59,9 @@ class Param:
     def inputs(self):
         return []
 
+    def __deepcopy__(self):
+        return Param(self._space, self._value)
+
 
 class Input:
     def __init__(self, name, value=None):
@@ -68,7 +75,7 @@ class Input:
         self._value = value
 
     def expand(self):
-        return self
+        return copy.deepcopy(self)
 
     @property
     def value(self):
@@ -81,3 +88,6 @@ class Input:
     @property
     def inputs(self):
         return [self]
+
+    def __deepcopy__(self):
+        return Input(self._name, self._value)

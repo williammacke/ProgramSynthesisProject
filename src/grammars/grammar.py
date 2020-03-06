@@ -3,14 +3,23 @@ import random
 from ..expressions.expression import Expression
 
 class Grammar:
-    def __init__(self, symbols, functions):
-        self._symbols = symbols
-        self._functions = functions
+    def __init__(self, start, non_terminals, terminals):
+        self._start = start
+        self._non_terminals = set([start] + list(non_terminals))
+        self._symbols = set(list(self._non_terminals) + list(terminals))
+        self._expressions = {e.id:e for nt in self._non_terminals for e in nt.expressions}
 
-    def addSymbol(self, symbol):
-        self._symbols.append(symbol)
+    def add_terminal(self, terminal):
+        self._symbols.add(terminal)
+
+    def add_non_terminal(self, non_terminal):
+        self._non_terminals.add(non_terminal)
+        self._symbols.add(non_terminal)
+        self._expressions.update({non_terminal.id:non_terminal})
 
     def gen_random_program(self):
-        function = random.choice(self._functions)
-        symbols = [random.choice(self._symbols) for _ in range(function.num_args)]
-        return Expression(symbols, function.function).expand()
+        return self._start.expand()
+
+    @property
+    def non_terminals(self):
+        return self._non_terminals
