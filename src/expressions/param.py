@@ -33,6 +33,10 @@ class Value:
     def code(self):
         return str(self._value)
 
+    @property
+    def enabled(self):
+        return True
+
     def __deepcopy__(self, memo):
         return Value(self.value)
 
@@ -40,6 +44,10 @@ class Param:
     def __init__(self, space, value=None):
         self._space = space
         self._value = value
+
+    @property
+    def enabled(self):
+        return True
 
     def setValue(self, value):
         self._value = value
@@ -82,6 +90,10 @@ class Input:
     def __init__(self, name, value=None):
         self._name = name
         self._value = value
+
+    @property
+    def enabled(self):
+        return True
 
     def setValue(self, value):
         pass

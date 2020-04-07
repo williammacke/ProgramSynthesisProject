@@ -49,3 +49,6 @@ class Grammar:
     @property
     def inputs(self):
         return self._inputs
+
+    def contains(self, nt):
+        return nt in self._non_terminals

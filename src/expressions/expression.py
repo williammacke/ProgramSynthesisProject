@@ -42,6 +42,17 @@ class Expression:
         self._id = ident
         self._parent = None
         self._func_string = func_string
+        self._enabled = True
+
+    def disable(self):
+        self._enabled = False
+
+    def enable(self):
+        self._enabled = True
+
+    @property
+    def enabled(self):
+        return self._enabled
 
     def expand(self):
         return Expression([p.expand() for p in self._params], self._function, self._id, self._func_string)
