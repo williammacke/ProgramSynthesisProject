@@ -7,7 +7,6 @@ def optimize_expression(e, x, y, inputs):
     x = np.array(x)
     y = np.array(y)
     def evaluate_expression(*params):
-        print(params)
         e.setValue(*params)
         y_ = []
         for p in x:
@@ -19,7 +18,8 @@ def optimize_expression(e, x, y, inputs):
             y_.append(e.value)
         y_ = np.array(y_)
         diff = y-y_
-        return np.dot(diff, diff)
+        err =  np.dot(diff, diff)
+        return err
 
     results = gp_minimize(evaluate_expression, e.space)
     e.setValue(*results.x)

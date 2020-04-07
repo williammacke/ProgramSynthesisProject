@@ -17,7 +17,7 @@ symbols = inputs+non_terminals+[param]
 terminals = inputs+[param]
 j = 0
 for nt in non_terminals:
-    for i in range(0):
+    for i in range(1):
         fun = random.choice(expression.FUNCTIONS)
         nt.add_expression(expression.Expression(
             random.choices(symbols, k=fun.num_args), 
@@ -37,8 +37,6 @@ p = grammar.gen_random_program()
 print(p.code)
 
 x = np.linspace(-5, 5, 1000)
-print(x)
-input()
 
 def f(x):
     return 3*x+5

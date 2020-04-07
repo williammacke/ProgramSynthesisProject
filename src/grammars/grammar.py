@@ -2,11 +2,16 @@ from src.grammars import non_terminal
 import random
 import copy
 from src.expressions.expression import Expression
+from skopt.space import Real
 
 class Grammar:
-    def __init__(self, start, terminals, non_terminals = []):
+    def __init__(self, start, env, non_terminals = []):
         self._start = start
         self._non_terminals = set([start] + list(non_terminals))
+        assert len(env.observation_space.shape) == 1
+        num_inputs = env.observation_space.shape[0]
+        self._inputs = np.array([Input(f"x{i}") for i in range(num_inputs)])
+        terminals = list(self._inputs) + [Param(Real(-100,100))]
         self._symbols = set(list(self._non_terminals) + list(terminals))
         self._expressions = {e.id:e for nt in self._non_terminals for e in nt.expressions}
 
@@ -40,3 +45,7 @@ class Grammar:
     @property
     def non_terminals(self):
         return self._non_terminals
+
+    @property
+    def inputs(self):
+        return self._inputs
